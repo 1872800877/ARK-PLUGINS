@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!--mybatis-generator:generate project的name改为自己的项目名-->  
+<project name="AwesomeMirai" default="jar">  
+	<target name="compile"> 
+		  <property name="dir.compiler.home" location="." />    
+		  <exec executable="cmd" failonerror="true" dir="${dir.compiler.home}">  
+		     <arg line="/c mvn package" />  
+		   </exec>  
+	</target>
+	<target name="jar" depends="compile" description="拷贝配置文件">
+		<copy todir="${dir.compiler.home}\target\out\serverConfig">
+			<fileset dir="${basedir}\src\main\resources">
+				<include name="**\*.*" />
+			</fileset>
+		</copy>
+		<copy file="${basedir}\serverConfig.json" todir="${dir.compiler.home}\target\out" overwrite="true"/>
+	</target>
+</project> 

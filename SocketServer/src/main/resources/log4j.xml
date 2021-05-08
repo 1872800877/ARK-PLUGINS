@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//log4j/log4j Configuration//EN" "log4j.dtd">
+<log4j:configuration> 
+    <!--输出到控制台-->
+    <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <!--Threshold是个全局的过滤器，他将把低于所设置的level的信息过滤不显示出来--> 
+        <param name="Threshold" value="DEBUG" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{yyyy.MM.dd HH:mm:ss SS} %5p [%t] %C{1}.%M(%L) | %m%n" />
+        </layout>
+    </appender>
+    
+    <!-- 系统应用级别日志，日志达到一定大小后，产生新的问题 -->
+    <appender name="fileMaxAppenderAll" class="org.apache.log4j.RollingFileAppender">
+        <param name="threshold" value="error" />
+        <param name="file" value="./logs/server.sys.log" />
+        <param name="maxFileSize" value="10M" />
+        <param name="maxBackupIndex" value="5" />
+        <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 --> 
+        <param name="append" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p][%d{yyyy-MM-dd HH:mm:ss,SSS}][%c] :%m%n" />
+        </layout>
+    </appender>
+ 
+    <!--输出到文件 所有日志，根据name='DatePattern'设置每隔多久分割成一个新文件 -->
+    <appender name="fileAppenderAll" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="./logs/server.log" />
+        <!-- value的格式，（天，小时，分钟）， 控制每隔多久分割成一个新文件 -->
+        <param name="DatePattern" value=".yyyy-MM-dd-a" />
+        <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 --> 
+        <param name="append" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{yyyy.MM.dd HH:mm:ss SS} %5p [%t] %C{1}.%M(%L) | %m%n" />
+        </layout>
+    </appender>
+    
+    <!--输出到错误日志文件，只要加上filter过滤标签即可输出指定级别的日志  -->
+    <appender name="fileAppenderError" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="./logs/server.error.log" />
+        <param name="DatePattern" value=".yyyy-MM-dd-a" />
+        <param name="Append" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{yyyy.MM.dd HH:mm:ss SS} %5p [%t] %C{1}.%M(%L) | %m%n" />
+        </layout>
+        <!-- 日志级别，必须LevelMin <= LevelMax ,否则不输出日志 -->
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ERROR" />
+            <param name="LevelMax" value="ERROR" />
+        </filter>
+    </appender>     
+    <!-- 输出sql日志文件 -->
+    <appender name="fileSql" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="./logs/server.sql.log" />
+        <param name="DatePattern" value=".yyyy-MM-dd-a" />
+        <param name="Append" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%d{yyyy.MM.dd HH:mm:ss SS} %5p [%t] %C{1}.%M(%L) | %m%n" />
+        </layout>
+        <!-- 日志级别，必须LevelMin <= LevelMax ,否则不输出日志 -->
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="DEBUG" />
+            <param name="LevelMax" value="ERROR" />
+        </filter>
+    </appender>
+    <!-- druid数据源配置打印日志 start-->
+    <!-- <logger name="druid.sql" additivity="true">
+        <level value ="DEBUG"/>         
+        <appender-ref ref="fileSql" />
+    </logger> -->
+    <!-- <logger name="druid.sql.DataSource" additivity="true">
+        <level value ="DEBUG"/>         
+        <appender-ref ref="fileSql" />
+    </logger>
+    <logger name="druid.sql.Connection" additivity="true">
+        <level value ="DEBUG"/>         
+        <appender-ref ref="fileSql" />
+    </logger> -->
+    <!-- <logger name="druid.sql.Statement" additivity="true">
+        <level value ="DEBUG"/>         
+        <appender-ref ref="fileSql" />
+    </logger> -->
+    <!-- <logger name="druid.sql.ResultSet" additivity="true">
+        <level value ="DEBUG"/>         
+        <appender-ref ref="fileSql" />
+    </logger> -->
+    <!-- end -->
+    <root>
+        <priority value="INFO" />
+        <appender-ref ref="consoleAppender" />
+        <appender-ref ref="fileAppenderAll" />
+        <appender-ref ref="fileAppenderError" />
+    </root>
+</log4j:configuration>
