@@ -1,0 +1,6 @@
+{
+  "FullName":"CrossServerChat",
+  "Description":"Allows cross chat by socket",
+  "Version":2.2,
+  "MinApiVersion":3.0
+}

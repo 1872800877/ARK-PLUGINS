@@ -1,0 +1,12 @@
+﻿{
+	"Socket":{
+		"url":"127.0.0.1",
+		"port":8888,
+		"map_name":"PVE焦土"
+	},
+	"LunchMessage":{
+		"enable":true,
+		"message":"服务器启动成功",
+		"name":"服务器"
+	}
+}
