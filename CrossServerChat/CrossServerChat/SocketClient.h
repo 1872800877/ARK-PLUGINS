@@ -4,7 +4,7 @@
 #include <Logger/Logger.h>
 #include <functional>
 #include "Plugin.h"
-#pragma comment(lib, "ws2_32.lib")  //加载 ws2_32.dll
+#pragma comment(lib, "ws2_32.lib")
 using namespace std;
 class SocketClient
 {

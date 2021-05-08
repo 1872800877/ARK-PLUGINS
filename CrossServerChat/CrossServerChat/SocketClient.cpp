@@ -15,12 +15,9 @@ bool SocketClient::isConnect() {
 	return _IsConnect;
 }
 bool SocketClient::init() {
-	//	1	初始化
 	WSADATA wsadata;
 	WSAStartup(MAKEWORD(2, 2), &wsadata);
-	//	2	创建套接字
 	clientSocket = socket(PF_INET, SOCK_STREAM, 0);
-	//	3	绑定套接字	指定绑定的IP地址和端口号
 	const auto& socket = Plugin::Get().config["Socket"];
 	string url = socket["url"];
 	int port = socket["port"];
@@ -28,8 +25,7 @@ bool SocketClient::init() {
 	socketAddr.sin_family = PF_INET;
 	socketAddr.sin_addr.S_un.S_addr = inet_addr(url.c_str());
 	socketAddr.sin_port = htons(port);
-	int nNetTimeout = 1000; //1秒
-	//发送时限
+	int nNetTimeout = 1000;
 	if (SOCKET_ERROR == setsockopt(clientSocket, SOL_SOCKET, SO_SNDTIMEO, (char *)&nNetTimeout, sizeof(int)))
 	{
 		Log::GetLog()->error("Set SO_SNDTIMEO error !\n");
@@ -64,9 +60,9 @@ void SocketClient::sendInfo(const std::string info,int type) {
 	FMemory::Free(reinterpret_cast<void*>(packet));
 }
 void SocketClient::getInfo(Packet &packet) {
-	char recvBuf[1024];//缓冲区
-	int size = 0;//累计接收长度
-	int packet_size = 1;//初始包长度
+	char recvBuf[1024];
+	int size = 0;
+	int packet_size = 1;
 	char* packet_data = nullptr;
 	while (size < packet_size)
 	{
@@ -118,9 +114,7 @@ void SocketClient::close() {
 	{
 		Log::GetLog()->info("Close Socket");
 		_IsConnect = false;
-		//	6	关闭socket
 		closesocket(clientSocket);
-		//	7	终止
 		WSACleanup();
 	}
 }

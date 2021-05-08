@@ -54,19 +54,17 @@ DWORD WINAPI ProcessRecvQueue(LPVOID lpParam)
 		{
 			try
 			{
-				//Log::GetLog()->debug("Recv message:" + UnicodeToAscii(Utf8ToUnicode(packet.data)));
 				nlohmann::json message_entry = nlohmann::json::parse(packet.data);
-				//FString message = FString(ArkApi::Tools::Utf8Decode(message_entry.value("message", "")));
 				std::string message = message_entry.value("message", "");
 				if (message.size()) {
 					FString tribeName = FString(ArkApi::Tools::Utf8Decode(message_entry.value("tribeName", "")));
 					FString name = FString(ArkApi::Tools::Utf8Decode(message_entry.value("name", "UnKnownName")));
 					FString map = FString(ArkApi::Tools::Utf8Decode(message_entry.value("map", "UnKnownMap")));
-					FString sendHead = tribeName.IsEmpty() ? FString::Format(*FString("{} <{}>"), *name, *map) : sendHead = FString::Format(*FString("{} [{}]<{}>"), *name, *tribeName, *map);
+					FString sendHead = FString::Format(*FString("{} <{}>"), *name, *map);
 					FString steam_id = FString(message_entry.value("steam_id", "0"));
-					//FString steamName = FString(ArkApi::Tools::Utf8Decode(message_entry.value("steamName", "")));
-					Log::GetLog()->info("{}:{}", sendHead.ToString(), UnicodeToAscii(Utf8ToUnicode(message.c_str())));
-					SendChatMessageToAll(sendHead, steam_id, ArkApi::Tools::Utf8Decode(message).c_str());
+					FString steamName = FString(ArkApi::Tools::Utf8Decode(message_entry.value("steamName", "")));
+					Log::GetLog()->info(UnicodeToAscii(Utf8ToUnicode(message_entry.dump())));
+					SendChatMessageToAll(0, sendHead, steamName,tribeName, ArkApi::Tools::Utf8Decode(message).c_str(),nullptr);
 				}
 			}
 			catch (const std::exception& e)

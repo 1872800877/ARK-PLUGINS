@@ -10,7 +10,7 @@ public:
 	inline ~MyQueue()
 	{
 		_IsLoad = false;
-		_task_cv.notify_all(); // 唤醒所有线程执行
+		_task_cv.notify_all();
 	}
 	void push(const T value)
 	{
